@@ -3,7 +3,7 @@ module github.com/NerdsWhoFish/dusk-plugin-firewalla
 go 1.26.5
 
 require (
-	github.com/NerdsWhoFish/dusk-plugin-sdk v0.0.0-20260813101248-8f8a589d67c0
+	github.com/NerdsWhoFish/dusk-plugin-sdk v1.0.0
 	golang.org/x/crypto v0.51.0
 	google.golang.org/grpc v1.83.0
 	google.golang.org/protobuf v1.36.12
