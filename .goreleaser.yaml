@@ -1,0 +1,46 @@
+version: 2
+
+project_name: dusk-plugin-firewalla
+
+# Archive and binary names are derived from the repository name and carry no
+# version, so Dusk can name the file it wants before fetching the release.
+builds:
+  - main: ./cmd/dusk-plugin-firewalla
+    binary: dusk-plugin-firewalla
+    env:
+      - CGO_ENABLED=0
+    goos: [linux, darwin]
+    goarch: [amd64, arm64]
+    ldflags:
+      - -s -w -X main.version={{ .Version }}
+
+archives:
+  - formats: [tar.gz]
+    name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
+
+# Dusk refuses to install anything it cannot verify, so this file is load
+# bearing rather than a convenience.
+checksum:
+  name_template: checksums.txt
+
+changelog:
+  use: github
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+      - "^chore:"
+  groups:
+    - title: Features
+      regexp: '^feat(\(.+\))?!?:'
+      order: 0
+    - title: Fixes
+      regexp: '^fix(\(.+\))?!?:'
+      order: 1
+    - title: Everything else
+      order: 99
+
+release:
+  draft: false
+  prerelease: auto

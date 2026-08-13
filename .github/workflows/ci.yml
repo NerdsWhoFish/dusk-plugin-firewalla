@@ -1,0 +1,30 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions: {}
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: go.mod
+      - run: go vet ./...
+
+      # cgo arrives transitively and takes cross compilation with it, so the
+      # build that would notice runs before the tests that would not.
+      - run: CGO_ENABLED=0 go build ./...
+      - run: go test -race ./...
+
+      # A release that cannot be built is discovered here rather than at the
+      # moment somebody tries to cut one.
+      - uses: goreleaser/goreleaser-action@v6
+        with:
+          version: "~> v2"
+          args: build --snapshot --clean

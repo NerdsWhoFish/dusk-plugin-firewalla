@@ -1,0 +1,31 @@
+name: release
+
+on:
+  workflow_dispatch:
+    inputs:
+      scope:
+        description: What to cut
+        type: choice
+        default: Release
+        options:
+          - Release
+          - Release Candidate
+      bump:
+        description: Which part of the version to bump
+        type: choice
+        default: patch
+        options:
+          - patch
+          - minor
+          - major
+
+permissions: {}
+
+jobs:
+  release:
+    uses: NerdsWhoFish/.github/.github/workflows/plugin-release.yml@main
+    permissions:
+      contents: write
+    with:
+      scope: ${{ inputs.scope }}
+      bump: ${{ inputs.bump }}
